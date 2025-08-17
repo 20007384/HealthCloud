@@ -19,17 +19,39 @@ const createTestUsers = async () => {
     const userCount = await User.countDocuments();
     if (userCount === 0) {
       const testUsers = [
-        { username: 'doctor', password: 'password123', role: 'doctor', fullName: 'Dr. Sarah Johnson' },
-        { username: 'nurse', password: 'password123', role: 'nurse', fullName: 'Nurse Mike Chen' },
-        { username: 'admin', password: 'password123', role: 'admin', fullName: 'Admin Lisa Wang' }
+        { 
+          username: 'doctor', 
+          email: 'doctor@hospital.com',  // Add email
+          password: 'password123', 
+          role: 'doctor', 
+          fullName: 'Dr. Sarah Johnson' 
+        },
+        { 
+          username: 'nurse', 
+          email: 'nurse@hospital.com',   // Add email
+          password: 'password123', 
+          role: 'nurse', 
+          fullName: 'Nurse Mike Chen' 
+        },
+        { 
+          username: 'admin', 
+          email: 'admin@hospital.com',   // Add email
+          password: 'password123', 
+          role: 'admin', 
+          fullName: 'Admin Lisa Wang' 
+        }
       ];
 
       for (const userData of testUsers) {
         const hashedPassword = await bcrypt.hash(userData.password, 10);
-        const user = new User({ ...userData, password: hashedPassword });
+        const user = new User({ 
+          ...userData, 
+          password: hashedPassword,
+          mfaEnabled: true  // Add this if your schema expects it
+        });
         await user.save();
       }
-      console.log(' Test users created successfully');
+      console.log('✅ Test users created successfully');
     }
   } catch (error) {
     console.error('Error creating users:', error);
