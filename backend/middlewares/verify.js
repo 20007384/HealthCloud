@@ -3,16 +3,11 @@ const verifyToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
-  console.log('🔍 Auth header:', authHeader); // Debug log
-  console.log('🔑 Extracted token:', token ? token.substring(0, 20) + '...' : 'No token'); // Debug log
-
   if (!token) {
-    console.log('❌ No token provided');
     return res.status(401).json({ error: 'No token provided' });
   }
 
   try {
-    // Make sure JWT_SECRET matches what you used during login
     const JWT_SECRET = process.env.JWT_SECRET || '123456';
     console.log(' Using JWT secret:', JWT_SECRET.substring(0, 10) + '...'); // Debug log
     
