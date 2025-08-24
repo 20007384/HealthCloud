@@ -21,24 +21,24 @@ const createTestUsers = async () => {
       const testUsers = [
         { 
           username: 'doctor', 
-          email: 'doctor@hospital.com',  // Add email
+          email: 'doctor@hospital.com', 
           password: 'password123', 
           role: 'doctor', 
-          fullName: 'Dr. Sarah Johnson' 
+          fullName: 'Dr. Sarah' 
         },
         { 
           username: 'nurse', 
-          email: 'nurse@hospital.com',   // Add email
+          email: 'nurse@hospital.com',   
           password: 'password123', 
           role: 'nurse', 
-          fullName: 'Nurse Mike Chen' 
+          fullName: 'Nurse Khetrapal' 
         },
         { 
           username: 'admin', 
-          email: 'admin@hospital.com',   // Add email
+          email: 'admin@hospital.com',   
           password: 'password123', 
           role: 'admin', 
-          fullName: 'Admin Lisa Wang' 
+          fullName: 'Admin Harsh' 
         }
       ];
 
@@ -47,11 +47,11 @@ const createTestUsers = async () => {
         const user = new User({ 
           ...userData, 
           password: hashedPassword,
-          mfaEnabled: true  // Add this if your schema expects it
+          mfaEnabled: true  
         });
         await user.save();
       }
-      console.log('✅ Test users created successfully');
+      console.log(' Test users created successfully');
     }
   } catch (error) {
     console.error('Error creating users:', error);
@@ -64,7 +64,6 @@ mongoose.connect(process.env.MONGODB_URI)
 .catch(err => console.log('Database error:', err));
 
 
-// Register new user
 app.post('/api/register', async (req, res) => {
   try {
     const { username, password, role, fullName } = req.body;
@@ -86,6 +85,7 @@ app.post('/api/register', async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
+
 app.post('/api/login', async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -100,9 +100,7 @@ app.post('/api/login', async (req, res) => {
       return res.status(400).json({ error: 'Invalid password' });
     }
 
-    // If user has MFA enabled (which is true for all users)
     if (user.mfaEnabled) {
-      // Send temporary token for MFA step
       const tempToken = jwt.sign(
         { userId: user._id, username: user.username, step: 'mfa_required' },
         process.env.JWT_SECRET || 'your-secret-key',
